@@ -44,6 +44,10 @@ const linkedFGProps = Object.assign(...[
   'linkCurvature',
   'linkCurveRotation',
   'linkMaterial',
+  'linkDirectionalArrowLength',
+  'linkDirectionalArrowColor',
+  'linkDirectionalArrowRelPos',
+  'linkDirectionalArrowResolution',
   'linkDirectionalParticles',
   'linkDirectionalParticleSpeed',
   'linkDirectionalParticleWidth',
@@ -81,6 +85,16 @@ export default Kapsule({
     nodeLabel: { default: 'name', triggerUpdate: false },
     linkLabel: { default: 'name', triggerUpdate: false },
     linkHoverPrecision: { default: 1, onChange: (p, state) => state.renderObjs.lineHoverPrecision(p), triggerUpdate: false },
+    enableNavigationControls: {
+      default: true,
+      onChange(enable, state) {
+        const tbControls = state.renderObjs.tbControls();
+        if (tbControls) {
+          tbControls.enabled = enable;
+        }
+      },
+      triggerUpdate: false
+    },
     enableNodeDrag: { default: true, triggerUpdate: false },
     onNodeClick: { default: () => {}, triggerUpdate: false },
     onNodeHover: { default: () => {}, triggerUpdate: false },
@@ -135,6 +149,7 @@ export default Kapsule({
     const camera = state.renderObjs.camera();
     const renderer = state.renderObjs.renderer();
     const tbControls = state.renderObjs.tbControls();
+    tbControls.enabled = !!state.enableNavigationControls;
     state.lastSetCameraZ = camera.position.z;
 
     // Add info space
@@ -211,7 +226,9 @@ export default Kapsule({
             .d3AlphaTarget(0)   // release engine low intensity
             .resetCountdown();  // let the engine readjust after releasing fixed nodes
 
-          tbControls.enabled = true; // Re-enable trackball controls
+          if (state.enableNavigationControls) {
+            tbControls.enabled = true; // Re-enable trackball controls
+          }
 
           // clear cursor
           renderer.domElement.classList.remove('grabbable');
