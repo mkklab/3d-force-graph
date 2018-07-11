@@ -10,7 +10,7 @@ export default {
   input: 'src/index.js',
   output: [
     {
-      format: 'umd',
+      format: 'es',
       name: 'ForceGraph3D',
       file: `dist/${name}.js`,
       sourcemap: true,
