@@ -58,7 +58,9 @@ const linkedFGProps = Object.assign(...[
   'd3VelocityDecay',
   'warmupTicks',
   'cooldownTicks',
-  'cooldownTime'
+  'cooldownTime',
+  'onEngineTick',
+  'onEngineStop'
 ].map(p => ({ [p]: bindFG.linkProp(p)})));
 const linkedFGMethods = Object.assign(...[
   'd3Force'
@@ -96,6 +98,8 @@ export default Kapsule({
       triggerUpdate: false
     },
     enableNodeDrag: { default: true, triggerUpdate: false },
+    onNodeDrag: { default: () => {}, triggerUpdate: false },
+    onNodeDragEnd: { default: () => {}, triggerUpdate: false },
     onNodeClick: { default: () => {}, triggerUpdate: false },
     onNodeHover: { default: () => {}, triggerUpdate: false },
     onLinkClick: { default: () => {}, triggerUpdate: false },
@@ -125,6 +129,8 @@ export default Kapsule({
     },
     scene: state => state.renderObjs.scene(), // Expose scene
     camera: state => state.renderObjs.camera(), // Expose camera
+    renderer: state => state.renderObjs.renderer(), // Expose renderer
+    tbControls: state => state.renderObjs.tbControls(), // Expose tbControls
     ...linkedFGMethods,
     ...linkedRenderObjsMethods
   },
@@ -206,6 +212,8 @@ export default Kapsule({
 
           // prevent freeze while dragging
           state.forceGraph.resetCountdown();
+
+          state.onNodeDrag(node);
         });
 
         dragControls.addEventListener('dragend', function (event) {
@@ -220,6 +228,8 @@ export default Kapsule({
               }
             });
             delete(node.__initialFixedPos);
+
+            state.onNodeDragEnd(node);
           }
 
           state.forceGraph
