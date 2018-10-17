@@ -1,4 +1,3 @@
-import 'babel-polyfill'
 import { AmbientLight, DirectionalLight } from 'three';
 
 const three = window.THREE

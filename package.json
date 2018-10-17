@@ -38,14 +38,14 @@
     "three": "^0.94.0",
     "three-dragcontrols": "^0.88.2",
     "three-forcegraph": "^1.15.1",
-    "three-render-objects": "^1.0.6"
+    "three-render-objects": "^1.0.6",
+    "babel-polyfill": "^6.26.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "postcss-nested": "^3.0.0",
     "postcss-simple-vars": "^4.1.0",

@@ -10,11 +10,11 @@ export default {
   input: 'src/index.js',
   output: [
     {
-      format: 'es',
+      format: 'umd',
       name: 'ForceGraph3D',
       file: `dist/${name}.js`,
       sourcemap: true,
-      banner: `// Version ${version} ${name} - ${homepage}`
+      banner: `// Version ${version} ${name} - ${homepage}`,
     }
   ],
   plugins: [
