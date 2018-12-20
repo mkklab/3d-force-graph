@@ -1,6 +1,6 @@
 {
   "name": "3d-force-graph",
-  "version": "1.41.1",
+  "version": "1.43.4",
   "description": "UI component for a 3D force-directed graph using ThreeJS and d3-force-3d layout engine",
   "unpkg": "dist/3d-force-graph.min.js",
   "main": "dist/3d-force-graph.common.js",
@@ -26,35 +26,46 @@
     "url": "https://github.com/vasturiano/3d-force-graph/issues"
   },
   "scripts": {
-    "build": "rimraf dist && rollup -c",
-    "watch": "rollup -c -w",
-    "minify": "uglifyjs dist/3d-force-graph.js -o dist/3d-force-graph.min.js -c -m",
-    "build-module": "rollup -c rollup.config.module.js",
-    "prepublishOnly": "npm run build"
+    "build": "npm run clear-umd && rollup -c && npm run minify",
+    "build-module": "npm run clear-module && rollup -c rollup.config.module.js && npm run minify-module",
+    "clear": "rimraf dist",
+    "clear-umd": "rimraf dist/3d-force-graph.js dist/3d-force-graph.js.map dist/3d-force-graph.min.js",
+    "clear-module": "rimraf dist/3d-force-graph.common* dist/3d-force-graph.module*",
+    "minify": "terser dist/3d-force-graph.js -o dist/3d-force-graph.min.js -c -m --comments '/Version/'",
+    "minify-module": "npm run minify-module-cjs && npm run minify-module-es",
+    "minify-module-cjs": "terser dist/3d-force-graph.common.js -o dist/3d-force-graph.common.min.js -c -m --comments '/Version/'", 
+    "minify-module-es": "terser dist/3d-force-graph.module.js -o dist/3d-force-graph.module.min.js -c -m --comments '/Version/'",
+    "prepare": "npm run build && npm run minify && npm run build-module",
+    "watch": "rollup -c -w"
   },
+  "files": [
+    "src/**/*",
+    "dist/**/*",
+    "example/**/*"
+  ],
   "dependencies": {
     "accessor-fn": "^1.2.2",
     "kapsule": "^1.9.2",
-    "three": "^0.97.0",
+    "three": "^0.99.0",
     "three-dragcontrols": "^0.88.2",
-    "three-forcegraph": "^1.16.2",
-    "three-render-objects": "^1.2.6",
+    "three-forcegraph": "^1.16.3",
+    "three-render-objects": "^1.3.1",
     "babel-polyfill": "^6.26.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.1.2",
-    "@babel/plugin-proposal-class-properties": "^7.1.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
-    "@babel/preset-env": "^7.1.0",
-    "postcss-nested": "^4.1.0",
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.2.1",
+    "@babel/plugin-proposal-object-rest-spread": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "postcss-nested": "^4.1.1",
     "postcss-simple-vars": "^5.0.1",
     "rimraf": "^2.6.2",
-    "rollup": "^0.66.6",
-    "rollup-plugin-babel": "^4.0.3",
+    "rollup": "^0.68.0",
+    "rollup-plugin-babel": "^4.1.0",
     "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-node-resolve": "^3.4.0",
-    "rollup-plugin-postcss": "^1.6.2",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-postcss": "^1.6.3",
     "rollup-watch": "^4.3.1",
-    "uglify-js": "^3.4.9"
+    "terser": "^3.11.0"
   }
 }
