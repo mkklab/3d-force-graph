@@ -1,3 +1,4 @@
+import '@babel/polyfill';
 import { AmbientLight, DirectionalLight } from 'three';
 
 const three = window.THREE
@@ -62,7 +63,9 @@ const linkedFGProps = Object.assign(...[
   'cooldownTicks',
   'cooldownTime',
   'onEngineTick',
-  'onEngineStop'
+  'onEngineStop',
+  'onLoading',
+  'onFinishLoading'
 ].map(p => ({ [p]: bindFG.linkProp(p)})));
 const linkedFGMethods = Object.assign(...[
   'd3Force'
