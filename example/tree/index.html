@@ -39,6 +39,9 @@
       .d3Force('collision', d3.forceCollide(node => Math.cbrt(node.size) * NODE_REL_SIZE))
       .d3VelocityDecay(0.3);
 
+    // Decrease repel intensity
+    graph.d3Force('charge').strength(-15);
+
     fetch('../datasets/d3-dependencies.csv')
       .then(r => r.text())
       .then(d3.csvParse)

@@ -10,7 +10,7 @@ export default {
   input: 'src/index.js',
   output: [
     {
-      format: 'umd',
+      format: 'es',
       name: 'ForceGraph3D',
       file: `dist/${name}.js`,
       sourcemap: true,
@@ -24,7 +24,8 @@ export default {
         postCssNested()
       ]
     }),
-    babel({ exclude: 'node_modules/**' }),
+    // babel({ exclude: 'node_modules/**' }),
+    babel(),
     resolve(),
     commonJs()
   ]

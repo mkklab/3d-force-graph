@@ -16,7 +16,7 @@ import linkKapsule from './kapsule-link.js';
 
 //
 
-const CAMERA_DISTANCE2NODES_FACTOR = 150;
+const CAMERA_DISTANCE2NODES_FACTOR = 170;
 
 //
 
@@ -35,7 +35,9 @@ const linkedFGProps = Object.assign(...[
   'nodeColor',
   'nodeAutoColorBy',
   'nodeOpacity',
+  'nodeVisibility',
   'nodeThreeObject',
+  'nodeThreeObjectExtend',
   'linkSource',
   'linkTarget',
   'linkVisibility',
@@ -47,6 +49,9 @@ const linkedFGProps = Object.assign(...[
   'linkCurvature',
   'linkCurveRotation',
   'linkMaterial',
+  'linkThreeObject',
+  'linkThreeObjectExtend',
+  'linkPositionUpdate',
   'linkDirectionalArrowLength',
   'linkDirectionalArrowColor',
   'linkDirectionalArrowRelPos',
@@ -68,6 +73,7 @@ const linkedFGProps = Object.assign(...[
   'onFinishLoading'
 ].map(p => ({ [p]: bindFG.linkProp(p)})));
 const linkedFGMethods = Object.assign(...[
+  'refresh',
   'd3Force'
 ].map(p => ({ [p]: bindFG.linkMethod(p)})));
 
@@ -106,24 +112,13 @@ export default Kapsule({
     onNodeDrag: { default: () => {}, triggerUpdate: false },
     onNodeDragEnd: { default: () => {}, triggerUpdate: false },
     onNodeClick: { default: () => {}, triggerUpdate: false },
+    onNodeRightClick: { default: () => {}, triggerUpdate: false },
     onNodeHover: { default: () => {}, triggerUpdate: false },
     onLinkClick: { default: () => {}, triggerUpdate: false },
+    onLinkRightClick: { default: () => {}, triggerUpdate: false },
     onLinkHover: { default: () => {}, triggerUpdate: false },
     ...linkedFGProps,
     ...linkedRenderObjsProps
-  },
-
-  aliases: { // Prop names supported for backwards compatibility
-    nameField: 'nodeLabel',
-    idField: 'nodeId',
-    valField: 'nodeVal',
-    colorField: 'nodeColor',
-    autoColorBy: 'nodeAutoColorBy',
-    linkSourceField: 'linkSource',
-    linkTargetField: 'linkTarget',
-    linkColorField: 'linkColor',
-    lineOpacity: 'linkOpacity',
-    stopAnimation: 'pauseAnimation'
   },
 
   methods: {
@@ -157,6 +152,10 @@ export default Kapsule({
     renderer: state => state.renderObjs.renderer(), // Expose renderer
     controls: state => state.renderObjs.controls(), // Expose controls
     tbControls: state => state.renderObjs.tbControls(), // To be deprecated
+    _destructor: function() {
+      this.pauseAnimation();
+      this.graphData({ nodes: [], links: []});
+    },
     ...linkedFGMethods,
     ...linkedRenderObjsMethods
   },
@@ -199,7 +198,7 @@ export default Kapsule({
       state.graphData = state.forceGraph.graphData();
 
       // re-aim camera, if still in default position (not user modified)
-      if (camera.position.x === 0 && camera.position.y === 0 && camera.position.z === state.lastSetCameraZ) {
+      if (camera.position.x === 0 && camera.position.y === 0 && camera.position.z === state.lastSetCameraZ && state.graphData.nodes.length) {
         camera.lookAt(state.forceGraph.position);
         state.lastSetCameraZ = camera.position.z = Math.cbrt(state.graphData.nodes.length) * CAMERA_DISTANCE2NODES_FACTOR;
       }
@@ -335,6 +334,13 @@ export default Kapsule({
         const graphObj = getGraphObj(obj);
         if (graphObj) {
           state[`on${graphObj.__graphObjType === 'node' ? 'Node' : 'Link'}Click`](graphObj.__data);
+        }
+      })
+      .onRightClick(obj => {
+        // Handle right-click events
+        const graphObj = getGraphObj(obj);
+        if (graphObj) {
+          state[`on${graphObj.__graphObjType === 'node' ? 'Node' : 'Link'}RightClick`](graphObj.__data);
         }
       });
 
