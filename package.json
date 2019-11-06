@@ -27,6 +27,7 @@
     "url": "https://github.com/vasturiano/3d-force-graph/issues"
   },
   "scripts": {
+    "prod": "npm run build",
     "build": "npm run clear && rollup -c && npm run minify",
     "build-es": "npm run clear && rollup -c rollup.config.es.js && npm run minify",
     "build-module": "npm run clear && rollup -c rollup.config.module.js && npm run minify-module",
