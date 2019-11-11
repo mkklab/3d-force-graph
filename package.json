@@ -36,7 +36,7 @@
     "dev": "rollup -c -w",
     "minify": "terser dist/3d-force-graph.js -o dist/3d-force-graph.min.js -c -m --comments '/Version/'",
     "minify-module": "npm run minify-module-cjs && npm run minify-module-es",
-    "minify-module-cjs": "terser dist/3d-force-graph.common.js -o dist/3d-force-graph.common.min.js -c -m --comments '/Version/'", 
+    "minify-module-cjs": "terser dist/3d-force-graph.common.js -o dist/3d-force-graph.common.min.js -c -m --comments '/Version/'",
     "minify-module-es": "terser dist/3d-force-graph.module.js -o dist/3d-force-graph.module.min.js -c -m --comments '/Version/'",
     "prepare": "npm run build && npm run minify && npm run build-module",
     "watch": "rollup -c -w"
@@ -48,8 +48,9 @@
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
     "accessor-fn": "^1.2.2",
+    "core-js": "^2.6.10",
     "kapsule": "^1.12.1",
-    "three": "^0.109.0",
+    "three": "0.108.0",
     "three-dragcontrols": "^0.88.2",
     "three-forcegraph": "^1.29.1",
     "three-render-objects": "^1.8.0"
